@@ -75,7 +75,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source/>
+          <source />
           <target/>
         </configuration>
       </plugin>

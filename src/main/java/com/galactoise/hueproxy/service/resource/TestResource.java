@@ -7,10 +7,12 @@ import javax.ws.rs.Produces;
 
 @Path("/")
 @Produces("application/json")
-public class TestResource {
+public class TestResource extends AbstractHueProxyResource{
 
 	@GET
 	public String testMethod(){
-		return "{}";
+		
+		//bridge.authenticate(false);
+		return "{\"testKey\":\"" + bridge.getGroups().toString() + "\"}";
 	}
 }
