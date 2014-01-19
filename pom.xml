@@ -8,6 +8,11 @@
   <description>Tomcat app for converting disorganized calls from various apps into standardized REST calls to a Hue Bridge</description>
   
   <dependencies>
+	<dependency>
+      <groupId>jue</groupId>
+      <artifactId>jue</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+	</dependency>
     <dependency>
 	  <groupId>HueJavaSDK</groupId>
  	  <artifactId>HueJavaSDK</artifactId>
@@ -75,8 +80,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source />
-          <target/>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
     </plugins>
