@@ -12,7 +12,6 @@ public abstract class AbstractHueProxyResource {
 
 	protected static final Logger LOGGER = Logger.getLogger(AbstractHueProxyResource.class.getName());
 	
-//	protected HueBridge bridge;
 	protected String username;
 	protected HueBridge bridge;
 	
@@ -24,13 +23,5 @@ public abstract class AbstractHueProxyResource {
 		} catch (IOException | ApiException e) {
 			LOGGER.log(Level.SEVERE, "Could not create new hue bridge.");
 		}
-				
-//				HueJavaSDK implementation
-/*		try {
-			bridge = new HueBridge(InetAddress.getByName("192.168.1.252"),username);
-			bridge.authenticate(false);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}*/
 	}
 }

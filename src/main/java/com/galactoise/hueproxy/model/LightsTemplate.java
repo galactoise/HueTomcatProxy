@@ -2,20 +2,18 @@ package com.galactoise.hueproxy.model;
 
 import java.util.LinkedList;
 
-import nl.q42.jue.StateUpdate;
+public class LightsTemplate {
 
-public class TransitionSchedule {
-
-	protected LinkedList<StateUpdate> states;
+	protected LinkedList<StateUpdateWrapper> states;
 	protected boolean loop;
 	protected boolean random;
 	protected int numLoops;
 	
-	public LinkedList<StateUpdate> getStates() {
+	public LinkedList<StateUpdateWrapper> getStates() {
 		return states;
 	}
 	
-	public void setStates(LinkedList<StateUpdate> states) {
+	public void setStates(LinkedList<StateUpdateWrapper> states) {
 		this.states = states;
 	}
 	
@@ -42,6 +40,4 @@ public class TransitionSchedule {
 	public void setNumLoops(int numLoops) {
 		this.numLoops = numLoops;
 	}
-	
-	
 }

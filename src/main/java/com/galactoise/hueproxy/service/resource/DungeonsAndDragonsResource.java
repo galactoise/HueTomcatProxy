@@ -18,7 +18,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 	
 	@GET
 	@Path("/frostDragonRoom")
-	public void surgeLights(){
+	public Object surgeLights(){
 		try{
 			for(int i = 1; i <= 3; i++){
 				StateUpdate update = new StateUpdate();
@@ -29,11 +29,13 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
 		}
+
+		return null;
 	}
 	
 	@GET
 	@Path("/candleLight")
-	public void orangeCandleLight(){
+	public Object orangeCandleLight(){
 		try{
 			for(int i = 1; i <= 3; i++){
 				StateUpdate update = new StateUpdate();
@@ -44,11 +46,12 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	@GET
 	@Path("/lightingFlicker")
-	public void lightingFlicker(){
+	public Object lightingFlicker(){
 		try{
 			FullLight light = bridge.getLightById("1");
 			int brightness = light.getState().getBrightness();
@@ -69,11 +72,12 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	@GET
 	@Path("/flickerAndWait")
-	public void flickerAndWait(@QueryParam("numFlickers") int numFlickers){
+	public Object flickerAndWait(@QueryParam("numFlickers") int numFlickers){
 		for(int i = 0; i < numFlickers; i++){
 			lightingFlicker();
 			int extraPause = (int)(Math.random() * 5000);
@@ -84,6 +88,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 				e.printStackTrace();
 			}
 		}
+		return null;
 	}
 	
 }
