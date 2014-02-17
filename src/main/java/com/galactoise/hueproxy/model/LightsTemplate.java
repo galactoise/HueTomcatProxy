@@ -1,43 +1,45 @@
 package com.galactoise.hueproxy.model;
 
-import java.util.LinkedList;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+@JsonSerialize(include=Inclusion.NON_NULL)
 public class LightsTemplate {
 
-	protected LinkedList<StateUpdateWrapper> states;
-	protected boolean loop;
-	protected boolean random;
-	protected int numLoops;
+	protected StateUpdateWrapper[] states;
+	protected Boolean loop;
+	protected Boolean random;
+	protected Integer numLoops;
 	
-	public LinkedList<StateUpdateWrapper> getStates() {
+	public StateUpdateWrapper[] getStates() {
 		return states;
 	}
 	
-	public void setStates(LinkedList<StateUpdateWrapper> states) {
+	public void setStates(StateUpdateWrapper[] states) {
 		this.states = states;
 	}
-	
-	public boolean isLoop() {
+
+	public Boolean getLoop() {
 		return loop;
 	}
-	
-	public void setLoop(boolean loop) {
+
+	public void setLoop(Boolean loop) {
 		this.loop = loop;
 	}
-	
-	public boolean isRandom() {
+
+	public Boolean getRandom() {
 		return random;
 	}
-	
-	public void setRandom(boolean random) {
+
+	public void setRandom(Boolean random) {
 		this.random = random;
 	}
-	
-	public int getNumLoops() {
+
+	public Integer getNumLoops() {
 		return numLoops;
 	}
-	
-	public void setNumLoops(int numLoops) {
+
+	public void setNumLoops(Integer numLoops) {
 		this.numLoops = numLoops;
 	}
 }

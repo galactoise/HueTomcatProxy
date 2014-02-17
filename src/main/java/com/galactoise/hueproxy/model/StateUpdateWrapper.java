@@ -1,12 +1,17 @@
 package com.galactoise.hueproxy.model;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
 import nl.q42.jue.StateUpdate;
 
+@JsonSerialize(include=Inclusion.NON_NULL)
 public class StateUpdateWrapper {
 
 	private StateUpdate stateUpdate;
 	private StateUpdateType type;
-	private int postTransitionDuration;
+	private Integer postTransitionDuration;
+	private Integer target;
 	
 	public StateUpdate getStateUpdate() {
 		return stateUpdate;
@@ -24,11 +29,19 @@ public class StateUpdateWrapper {
 		this.type = type;
 	}
 	
-	public int getPostTransitionDuration() {
+	public Integer getPostTransitionDuration() {
 		return postTransitionDuration;
 	}
 	
-	public void setPostTransitionDuration(int postTransitionDuration) {
+	public void setPostTransitionDuration(Integer postTransitionDuration) {
 		this.postTransitionDuration = postTransitionDuration;
+	}
+
+	public Integer getTarget() {
+		return target;
+	}
+
+	public void setTarget(Integer target) {
+		this.target = target;
 	}
 }
