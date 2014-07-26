@@ -1,7 +1,9 @@
 package com.galactoise.hueproxy.service.resource;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -10,24 +12,27 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import nl.q42.jue.FullLight;
-import nl.q42.jue.Light;
-import nl.q42.jue.LightUpdateRequest;
-import nl.q42.jue.StateUpdate;
-import nl.q42.jue.exceptions.ApiException;
+import org.apache.http.client.ClientProtocolException;
 
-@Path("/lights")
+import com.galactoise.hueproxy.client.model.Light;
+
+@Path("/v2/lights")
 @Produces(MediaType.APPLICATION_JSON)
-public class LightsResource extends AbstractHueProxyResource {
+public class LightsResourceV2 extends AbstractHueProxyResource {
 
 	@GET
-	public List<Light> getAllLights(){
+	public HashMap<String,Light> getLights(){
 		try {
-			return bridge.getLights();
-		} catch (IOException | ApiException e) {
-			e.printStackTrace();
-		}		
-		return null;
+			HashMap<String, Light> lights = client.getLights();
+			//Take the JSON field key and add it as an ID of each object
+			for(String key : lights.keySet()){
+				lights.get(key).setId(key);
+			}
+			return lights;
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not get lights due to exception..." + e);
+			return null;
+		}
 	}
 	
 	@GET
@@ -35,14 +40,16 @@ public class LightsResource extends AbstractHueProxyResource {
 	public Light getLightById(@PathParam("id") String lightId){
 	
 		try {
-			return bridge.getLightById(lightId);
-		} catch (IOException | ApiException e) {
-			e.printStackTrace();
+			Light light = client.getLightById(lightId);
+			light.setId(lightId);
+			return light;
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not get light by id due to exception..." + e);
+			return null;
 		}
-		return null;
 	}
 	
-	@PUT
+	/*@PUT
 	@Path("/{id}/ravetime")
 	public void doRavetimeById(@PathParam("id") String lightId){
 		try {
@@ -57,22 +64,27 @@ public class LightsResource extends AbstractHueProxyResource {
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	@PUT
 	@Path("/{id}/togglePower")
-	public void toggleLightPower(@PathParam("id") String lightId){
+	public Light toggleLightPower(@PathParam("id") String lightId){
 		try {
-			FullLight light = bridge.getLightById(lightId);
-			StateUpdate update = new StateUpdate();
-			update.setOn(!light.getState().isOn());
-			bridge.setLightStateById(lightId, update);
-		} catch (IOException | ApiException e) {
-			e.printStackTrace();
+			Light light = client.getLightById(lightId);
+			light.getState().setOn(!light.getState().getOn());
+			
+			//Do update
+			
+
+			light.setId(lightId);
+			return light;			
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not get light by id due to exception..." + e);
+			return null;
 		}
 	}
 	
-	@PUT
+/*	@PUT
 	@Path("/{id}")
 	public String updateLight(@PathParam("id") String lightId, LightUpdateRequest lightToUpdate){
 		try{
@@ -82,5 +94,5 @@ public class LightsResource extends AbstractHueProxyResource {
 			e.printStackTrace();
 			return "{\"error\":\"" + e.getMessage() + "\"}";
 		}
-	}
+	}*/
 }
