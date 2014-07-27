@@ -2,7 +2,9 @@ package com.galactoise.hueproxy.client.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonFilter;
 
+@JsonFilter("LightState")
 public class LightState {
 
 	private Boolean on;
@@ -36,6 +38,10 @@ public class LightState {
 		return bri;
 	}
 
+	public void setBrightness(Integer brightness){
+		this.bri = brightness;
+	}
+	
 	public void setBri(Integer bri) {
 		this.bri = bri;
 	}
@@ -52,6 +58,10 @@ public class LightState {
 		return sat;
 	}
 
+	public void setSaturation(Integer saturation){
+		this.sat = saturation;
+	}
+	
 	public void setSat(Integer sat) {
 		this.sat = sat;
 	}
@@ -60,6 +70,10 @@ public class LightState {
 		return ct;
 	}
 
+	public void setColorTemperature(Integer colorTemperature){
+		this.ct = colorTemperature;
+	}
+	
 	public void setCt(Integer ct) {
 		this.ct = ct;
 	}
@@ -76,10 +90,24 @@ public class LightState {
 	public AlertEnum getAlert() {
 		return alert;
 	}
+	
+	@JsonProperty("alert")
+	public String getAlertFieldValue(){
+		return getAlert().getAlertFieldValue();
+	}
 
 	@JsonIgnore
 	public void setAlert(AlertEnum alert) {
 		this.alert = alert;
+	}
+	
+	@JsonProperty("alert")
+	public void setAlert(String alert){
+		for(AlertEnum enumValue : AlertEnum.values()){
+			if(enumValue.getAlertFieldValue().equalsIgnoreCase(alert)){
+				setAlert(enumValue);
+			}
+		}
 	}
 
 	@JsonIgnore
@@ -87,9 +115,23 @@ public class LightState {
 		return effect;
 	}
 	
+	@JsonProperty("effect")
+	public String getEffectFieldValue(){
+		return getEffect().getEffectFieldValue();
+	}
+	
 	@JsonIgnore
 	public void setEffect(EffectEnum effect) {
 		this.effect = effect;
+	}
+	
+	@JsonProperty("effect")
+	public void setEffect(String effect){
+		for(EffectEnum enumValue : EffectEnum.values()){
+			if(enumValue.getEffectFieldValue().equalsIgnoreCase(effect)){
+				setEffect(enumValue);
+			}
+		}
 	}
 
 	@JsonIgnore
@@ -133,8 +175,18 @@ public class LightState {
 	}
 	
 	public enum EffectEnum{
-		NONE,
-		COLORLOOP
+		NONE		("none"),
+		COLORLOOP	("colorloop");
+		
+		private final String effectFieldValue;
+
+		EffectEnum(String effectFieldValue){
+			this.effectFieldValue = effectFieldValue;
+		}
+		
+		public String getEffectFieldValue() {
+			return effectFieldValue;
+		}
 	}
 	
 	public enum ColorModeEnum{

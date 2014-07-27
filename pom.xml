@@ -82,7 +82,7 @@
   </dependencies>
   
   <build>
-    <sourceDirectory>src</sourceDirectory>
+   
     <finalName>HueProxy</finalName>
     <plugins>
       <plugin>

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.http.client.ClientProtocolException;
 
 import com.galactoise.hueproxy.client.model.Light;
+import com.galactoise.hueproxy.client.model.PointSymbolSelectionObject;
 
 @Path("/v2/lights")
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,22 +50,29 @@ public class LightsResourceV2 extends AbstractHueProxyResource {
 		}
 	}
 	
-	/*@PUT
+	@PUT
 	@Path("/{id}/ravetime")
 	public void doRavetimeById(@PathParam("id") String lightId){
+		HashMap<String, String> pointSymbols = new HashMap<String,String>();
+		pointSymbols.put("1", "0A00F1F01F1F1001F1FF100000000001F2F");
+		pointSymbols.put("2", "0A00F1F01F1F1001F1FF100000000001F2F");
+		
 		try {
-			bridge.setPointSymbolById(lightId, "{\"1\":\"0A00F1F01F1F1001F1FF100000000001F2F\"}");
-			bridge.transmitSymbolToGroupById("0", "{\"symbolselection\":\"01010501010102010301040105\",\"duration\":5000}");
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			bridge.transmitSymbolToGroupById("0", "{\"symbolselection\":\"01010501010102010301040105\",\"duration\":5000}");
-		} catch (IOException | ApiException e) {
-			e.printStackTrace();
+			client.updatePointSymbolsByLightId(lightId, pointSymbols);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not update point symbols by id due to exception..." + e);
 		}
-	}*/
+		
+		PointSymbolSelectionObject psso = new PointSymbolSelectionObject();
+		psso.setDuration(2000);
+		psso.setSymbolSelection("01010501010102010301040105");
+		
+		try {
+			client.transmitPointSymbolByGroupId("0", psso);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not trigger point symbols by id due to exception..." + e);
+		}
+	}
 	
 	@PUT
 	@Path("/{id}/togglePower")
@@ -74,6 +82,7 @@ public class LightsResourceV2 extends AbstractHueProxyResource {
 			light.getState().setOn(!light.getState().getOn());
 			
 			//Do update
+			client.updateLightById(lightId, light);
 			
 
 			light.setId(lightId);
@@ -84,15 +93,13 @@ public class LightsResourceV2 extends AbstractHueProxyResource {
 		}
 	}
 	
-/*	@PUT
+	@PUT
 	@Path("/{id}")
-	public String updateLight(@PathParam("id") String lightId, LightUpdateRequest lightToUpdate){
-		try{
-			FullLight light = bridge.getLightById(lightId);
-			return "{\"test\":\"WHOOOO\"}";
-		} catch(IOException | ApiException e){
-			e.printStackTrace();
-			return "{\"error\":\"" + e.getMessage() + "\"}";
+	public void updateLight(@PathParam("id") String lightId, Light lightToUpdate){
+		try {
+			client.updateLightById(lightId, lightToUpdate);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE,"Could not update light by id due to exception..." + e);
 		}
-	}*/
+	}
 }
