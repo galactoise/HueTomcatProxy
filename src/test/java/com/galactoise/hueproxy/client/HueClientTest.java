@@ -1,5 +1,6 @@
 package com.galactoise.hueproxy.client;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -39,5 +40,25 @@ public class HueClientTest {
 		assertNotNull(lights);
 		assertNotNull(lights.get("1"));
 		assertNotNull(lights.get("1").getName());
+	}
+	
+	@Test
+	@Ignore
+	public void testUpdateLightById() throws ClientProtocolException, IOException{
+		Light light = client.getLightById("1");
+		String lightName = light.getName();
+		if(lightName.equalsIgnoreCase("lamp1")){
+			light.setName("lamp1.1");
+		}else{
+			light.setName("lamp1");
+		}
+		light.getState().setOn(!light.getState().getOn());
+		
+		client.updateLightById("1", light);
+		light.getState().setOn(!light.getState().getOn());
+		
+		Light light2 = client.getLightById("1");
+		assertFalse(!light.getName().equalsIgnoreCase(light2.getName()));
+		assertFalse(light.getState().getOn() == light2.getState().getOn());		
 	}
 }

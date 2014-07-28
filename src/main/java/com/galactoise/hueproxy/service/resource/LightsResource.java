@@ -76,7 +76,7 @@ public class LightsResource extends AbstractHueProxyResource {
 	@Path("/{id}")
 	public String updateLight(@PathParam("id") String lightId, LightUpdateRequest lightToUpdate){
 		try{
-			FullLight light = bridge.getLightById(lightId);
+			bridge.getLightById(lightId);
 			return "{\"test\":\"WHOOOO\"}";
 		} catch(IOException | ApiException e){
 			e.printStackTrace();

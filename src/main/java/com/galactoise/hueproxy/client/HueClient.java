@@ -24,7 +24,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ser.FilterProvider;
 import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
 import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
 import org.codehaus.jackson.type.TypeReference;
@@ -180,8 +179,8 @@ public class HueClient {
 		StringBuilder urlBuilder2 = new StringBuilder();
 		urlBuilder2.append(getApiRoot());
 		urlBuilder2.append(String.format(LIGHT_STATE_BY_ID_PATH, id));
-		HueUpdateResponseObject[] lightStateUpdateResponse = put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light.getState());
-		
+		//HueUpdateResponseObject[] lightStateUpdateResponse = put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light.getState());
+		put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light.getState());
 
 		filters.removeFilter("Light");
 		filters.removeFilter("LightState");
@@ -195,14 +194,16 @@ public class HueClient {
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(getApiRoot());
 		urlBuilder.append(String.format(LIGHT_POINTSYMBOL_BY_ID_PATH, lightId));
-		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},pointSymbols);
+//		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},pointSymbols);
+		put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},pointSymbols);
 	}
 	
 	public void transmitPointSymbolByGroupId(String groupId, PointSymbolSelectionObject psso) throws ClientProtocolException, IOException{
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(getApiRoot());
 		urlBuilder.append(String.format(TRANSMIT_POINTSYMBOL_BY_GROUP_ID_PATH, groupId));
-		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},psso);
+//		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},psso);
+		put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},psso);
 	}
 	
 	
