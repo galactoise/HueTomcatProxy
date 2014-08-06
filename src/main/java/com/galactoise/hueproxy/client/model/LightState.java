@@ -3,8 +3,11 @@ package com.galactoise.hueproxy.client.model;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonFilter;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 @JsonFilter("LightState")
+@JsonSerialize(include = Inclusion.NON_NULL)
 public class LightState {
 
 	private Boolean on;
@@ -93,7 +96,11 @@ public class LightState {
 	
 	@JsonProperty("alert")
 	public String getAlertFieldValue(){
-		return getAlert().getAlertFieldValue();
+		if(getAlert() == null){ 
+			return null;
+		} else{
+			return getAlert().getAlertFieldValue();
+		}
 	}
 
 	@JsonIgnore
@@ -117,7 +124,11 @@ public class LightState {
 	
 	@JsonProperty("effect")
 	public String getEffectFieldValue(){
-		return getEffect().getEffectFieldValue();
+		if(getEffect() == null){
+			return null;
+		}else{
+			return getEffect().getEffectFieldValue();
+		}
 	}
 	
 	@JsonIgnore
@@ -141,7 +152,11 @@ public class LightState {
 
 	@JsonProperty("colormode")
 	public String getColorModeFieldValue(){
-		return getColorMode().getColorModeFieldValue();
+		if(getColorMode() == null){
+			return null;
+		}else{
+			return getColorMode().getColorModeFieldValue();
+		}
 	}
 
 	@JsonIgnore
