@@ -18,6 +18,7 @@ import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
 import org.codehaus.jackson.type.TypeReference;
 
 import com.galactoise.hueproxy.model.LightsTemplateV2;
+import com.galactoise.hueproxy.model.StateUpdateWrapperV2;
 
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.ConnectionFactoryBuilder;
@@ -35,13 +36,13 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 	
 	public TemplatesResourceV2(){
 		super();
-		try {
+		/*try {
 			memcachedClient = new MemcachedClient(new ConnectionFactoryBuilder().setDaemon(true).setFailureMode(FailureMode.Retry).build(), AddrUtil.getAddresses("192.168.1.253:11211"));
 			
 		} catch (IOException e) {
 			LOGGER.severe("Couldn't initialize memcached client.");
 			e.printStackTrace();
-		}
+		}*/
 		try {
 
 			SimpleFilterProvider filterProvider = new SimpleFilterProvider();
@@ -55,6 +56,12 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 			LOGGER.severe("Couldn't initialize jackson objects.");
 			e.printStackTrace();
 		}
+	}
+	
+	@PUT
+	@Path("/run")
+	public void testTemplate(LightsTemplateV2 template){
+		runTemplate(template);
 	}
 	
 	@PUT
@@ -119,15 +126,28 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 			return;
 		}
 		runTemplate(template);
-	}
+	}*/
 	
-	@PUT
-	@Path("/test")
-	public void testTemplate(LightsTemplate template){
-		runTemplate(template);
+	private void runTemplate(LightsTemplateV2 template){
+		LOGGER.severe("Running Template");
+		int numLoops = (template.getNumLoops() == null || template.getNumLoops() < 1) ? 1 : template.getNumLoops();
+		if(template.getLoop()){
+			LOGGER.severe("Looping template " + numLoops + " time(s).");
+		}
+		
+		StateUpdateWrapperV2[] states =  template.getStates();
+		for(int i = 0; i < numLoops; i++){
+			if(template.getRandom()){
+				LOGGER.severe("Random is not yet implemented.");
+				break;
+			}else if(states == null || states.length < 1){
+				LOGGER.severe("No states to execute...");
+			}
+			LOGGER.severe("Executing " + states.length + " states.");
+		}
 	}
 
-	private void runTemplate(LightsTemplate template) {
+	/*private void runTemplate(LightsTemplate template) {
 		int numLoops = 1;
 		//Don't allow infinite loops, for now
 		if(template.getNumLoops() == null || template.getNumLoops() == 0){
