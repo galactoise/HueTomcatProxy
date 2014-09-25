@@ -30,6 +30,7 @@ import org.codehaus.jackson.type.TypeReference;
 
 import com.galactoise.hueproxy.client.model.HueUpdateResponseObject;
 import com.galactoise.hueproxy.client.model.Light;
+import com.galactoise.hueproxy.client.model.LightState;
 import com.galactoise.hueproxy.client.model.PointSymbolSelectionObject;
 
 public class HueClient {
@@ -170,24 +171,32 @@ public class HueClient {
 	public HueUpdateResponseObject[] updateLightById(String id, Light light) throws ClientProtocolException, IOException{
 		
 		setFilterByName(filters, "Light", new HashSet<String>(Arrays.asList(UPDATE_LIGHT_FILTER_SET)));
-		setFilterByName(filters, "LightState", new HashSet<String>(Arrays.asList(UPDATE_LIGHT_STATE_FILTER_SET)));
+		
 		StringBuilder urlBuilder = new StringBuilder();
 		urlBuilder.append(getApiRoot());
 		urlBuilder.append(String.format(LIGHT_BY_ID_PATH, id));
 		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light);
 		
-		StringBuilder urlBuilder2 = new StringBuilder();
-		urlBuilder2.append(getApiRoot());
-		urlBuilder2.append(String.format(LIGHT_STATE_BY_ID_PATH, id));
-		//HueUpdateResponseObject[] lightStateUpdateResponse = put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light.getState());
-		put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},light.getState());
+		updateLightStateByLightId(id, light.getState());
 
 		filters.removeFilter("Light");
-		filters.removeFilter("LightState");
 		
 		List<HueUpdateResponseObject> responseList = Arrays.asList(lightUpdateResponse);
 		//responseList.addAll(Arrays.asList(lightStateUpdateResponse));
 		return responseList.toArray(new HueUpdateResponseObject[responseList.size()]);
+	}
+
+	public HueUpdateResponseObject[] updateLightStateByLightId(String id, LightState lightState)
+			throws UnsupportedEncodingException, ClientProtocolException,
+			IOException {
+		setFilterByName(filters, "LightState", new HashSet<String>(Arrays.asList(UPDATE_LIGHT_STATE_FILTER_SET)));
+		StringBuilder urlBuilder2 = new StringBuilder();
+		urlBuilder2.append(getApiRoot());
+		urlBuilder2.append(String.format(LIGHT_STATE_BY_ID_PATH, id));
+
+		filters.removeFilter("LightState");
+		
+		return put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},lightState);
 	}
 	
 	public void updatePointSymbolsByLightId(String lightId, HashMap<String,String> pointSymbols) throws ClientProtocolException, IOException{

@@ -1,6 +1,7 @@
 package com.galactoise.hueproxy.service.resource;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -11,13 +12,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.http.client.ClientProtocolException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.map.ser.impl.SimpleBeanPropertyFilter;
 import org.codehaus.jackson.map.ser.impl.SimpleFilterProvider;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.galactoise.hueproxy.client.model.LightState;
 import com.galactoise.hueproxy.model.LightsTemplateV2;
+import com.galactoise.hueproxy.model.StateUpdateType;
 import com.galactoise.hueproxy.model.StateUpdateWrapperV2;
 
 import net.spy.memcached.AddrUtil;
@@ -131,19 +135,44 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 	private void runTemplate(LightsTemplateV2 template){
 		LOGGER.severe("Running Template");
 		int numLoops = (template.getNumLoops() == null || template.getNumLoops() < 1) ? 1 : template.getNumLoops();
-		if(template.getLoop()){
-			LOGGER.severe("Looping template " + numLoops + " time(s).");
-		}
 		
 		StateUpdateWrapperV2[] states =  template.getStates();
 		for(int i = 0; i < numLoops; i++){
 			if(template.getRandom()){
 				LOGGER.severe("Random is not yet implemented.");
-				break;
+				continue;
 			}else if(states == null || states.length < 1){
 				LOGGER.severe("No states to execute...");
+				continue;
 			}
-			LOGGER.severe("Executing " + states.length + " states.");
+			for(StateUpdateWrapperV2 updateWrapper : states){
+				StateUpdateType type = updateWrapper.getType();
+				Integer target = updateWrapper.getTarget();
+				if(type == null){
+					LOGGER.severe("Type is a required field.  Please choose from 'LIGHT' or 'GROUP.'");
+				}else if(target == null){
+					LOGGER.severe("Target is a required field.  Please specify the light or group you want to update.");
+				}else if(type == StateUpdateType.GROUP){
+					LOGGER.severe("'GROUP' is not yet implemented.");
+				}else{
+					runStateUpdateOnLight(updateWrapper.getStateUpdate(), target);
+				}
+			}
+		}
+	}
+	
+	private void runStateUpdateOnLight(LightState update, Integer target){
+		if(update == null){
+			LOGGER.severe("Cannot update a light where no update object is provided.");
+			return;
+		}
+		LOGGER.severe("Executing state update for 'LIGHT' on target: " + target);
+		
+		try {
+			client.updateLightStateByLightId(String.valueOf(target), update);
+		} catch (IOException e) {
+			LOGGER.severe("Trying to update light state resulted in an exception");
+			e.printStackTrace();
 		}
 	}
 
