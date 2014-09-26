@@ -153,7 +153,7 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 				}else if(target == null){
 					LOGGER.severe("Target is a required field.  Please specify the light or group you want to update.");
 				}else if(type == StateUpdateType.GROUP){
-					LOGGER.severe("'GROUP' is not yet implemented.");
+					runStateUpdateOnGroup(updateWrapper.getStateUpdate(), target);
 				}else{
 					runStateUpdateOnLight(updateWrapper.getStateUpdate(), target);
 				}
@@ -172,6 +172,21 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 			client.updateLightStateByLightId(String.valueOf(target), update);
 		} catch (IOException e) {
 			LOGGER.severe("Trying to update light state resulted in an exception");
+			e.printStackTrace();
+		}
+	}
+	
+	private void runStateUpdateOnGroup(LightState update, Integer target){
+		if(update == null){
+			LOGGER.severe("Cannot update a group where no update object is provided.");
+			return;
+		}
+		LOGGER.severe("Executing state update for 'GROUP' on target: " + target);
+		
+		try {
+			client.updateGroupStateByGroupId(String.valueOf(target), update);
+		} catch (IOException e) {
+			LOGGER.severe("Trying to update group state resulted in an exception");
 			e.printStackTrace();
 		}
 	}

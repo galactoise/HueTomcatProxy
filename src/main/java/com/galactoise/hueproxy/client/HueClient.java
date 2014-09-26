@@ -48,6 +48,9 @@ public class HueClient {
 	public static final String LIGHT_STATE_BY_ID_PATH = "/lights/%s/state";
 	public static final String LIGHT_POINTSYMBOL_BY_ID_PATH = "/lights/%s/pointsymbol";
 	public static final String TRANSMIT_POINTSYMBOL_BY_GROUP_ID_PATH = "/groups/%s/transmitsymbol";
+	public static final String GROUPS_PATH = "/groups";
+	public static final String GROUP_BY_ID_PATH = "/groups/%s";
+	public static final String GROUP_STATE_BY_ID_PATH = "/groups/%s/action";
 	
 	public static final String[] UPDATE_LIGHT_FILTER_SET = new String[]{"name"};
 	public static final String[] UPDATE_LIGHT_STATE_FILTER_SET = new String[]{"on","bri","hue","sat","xy","ct","alert","colormode","effect","transitiontime"};
@@ -213,6 +216,18 @@ public class HueClient {
 		urlBuilder.append(String.format(TRANSMIT_POINTSYMBOL_BY_GROUP_ID_PATH, groupId));
 //		HueUpdateResponseObject[] lightUpdateResponse = put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},psso);
 		put(urlBuilder.toString(), new TypeReference<HueUpdateResponseObject[]>(){},psso);
+	}
+
+	public HueUpdateResponseObject[] updateGroupStateByGroupId(String id, LightState state) throws ClientProtocolException, IOException {
+		setFilterByName(filters, "LightState", new HashSet<String>(Arrays.asList(UPDATE_LIGHT_STATE_FILTER_SET)));
+		StringBuilder urlBuilder2 = new StringBuilder();
+		urlBuilder2.append(getApiRoot());
+		urlBuilder2.append(String.format(GROUP_STATE_BY_ID_PATH, id));
+
+		filters.removeFilter("LightState");
+		
+		return put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},state);
+		
 	}
 	
 	
