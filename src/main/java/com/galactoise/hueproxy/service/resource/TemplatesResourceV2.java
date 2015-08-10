@@ -50,6 +50,7 @@ public class TemplatesResourceV2 extends AbstractHueProxyResource{
 		try {
 
 			SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+			filterProvider.setDefaultFilter(SimpleBeanPropertyFilter.serializeAllExcept(new HashSet<String>()));
 			filterProvider.setFailOnUnknownId(false);
 			filterProvider.addFilter("Light", SimpleBeanPropertyFilter.serializeAllExcept(new HashSet<String>()));
 			filterProvider.addFilter("LightState", SimpleBeanPropertyFilter.serializeAllExcept(new HashSet<String>()));

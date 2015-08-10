@@ -8,10 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import nl.q42.jue.FullLight;
-import nl.q42.jue.StateUpdate;
-import nl.q42.jue.exceptions.ApiException;
-
 @Path("/dungeons/")
 @Produces(MediaType.TEXT_PLAIN)
 public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
@@ -19,7 +15,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 	@GET
 	@Path("/frostDragonRoom")
 	public Object surgeLights(){
-		try{
+	/*	try{
 			for(int i = 1; i <= 3; i++){
 				StateUpdate update = new StateUpdate();
 				update.setHue(44048);
@@ -28,7 +24,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 			}
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		return null;
 	}
@@ -36,7 +32,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 	@GET
 	@Path("/candleLight")
 	public Object orangeCandleLight(){
-		try{
+		/*try{
 			for(int i = 1; i <= 3; i++){
 				StateUpdate update = new StateUpdate();
 				update.setHue(9607);
@@ -45,14 +41,14 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 			}
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 	
 	@GET
 	@Path("/lightingFlicker")
 	public Object lightingFlicker(){
-		try{
+		/*try{
 			FullLight light = bridge.getLightById("1");
 			int brightness = light.getState().getBrightness();
 			for(int i = 1; i <= 3; i++){			
@@ -71,7 +67,7 @@ public class DungeonsAndDragonsResource extends AbstractHueProxyResource {
 			}
 		} catch (IOException | ApiException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 	

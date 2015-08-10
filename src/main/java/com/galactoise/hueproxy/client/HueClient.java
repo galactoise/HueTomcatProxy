@@ -55,6 +55,8 @@ public class HueClient {
 	public static final String[] UPDATE_LIGHT_FILTER_SET = new String[]{"name"};
 	public static final String[] UPDATE_LIGHT_STATE_FILTER_SET = new String[]{"on","bri","hue","sat","xy","ct","alert","colormode","effect","transitiontime"};
 	
+	public static final String NOT_IMPLEMENTED_OUTPUT = "{\"NOT_IMPLEMENTED\":\"Endpoint is not yet implemented.\"}";
+	
 	public HueClient(){
 		client = HttpClients.createDefault();
 		mapper = new ObjectMapper();
@@ -228,6 +230,14 @@ public class HueClient {
 		
 		return put(urlBuilder2.toString(), new TypeReference<HueUpdateResponseObject[]>(){},state);
 		
+	}
+
+	public Object getBridgeSimpleConfiguration() throws ClientProtocolException, IOException {
+		return NOT_IMPLEMENTED_OUTPUT;
+	}
+
+	public Object getBridgeFullConfiguration() throws ClientProtocolException, IOException {
+		return NOT_IMPLEMENTED_OUTPUT;
 	}
 	
 	
